@@ -1,0 +1,394 @@
+tcd - change directory (default home)
+mkdir - make directory (folder)
+cd ~ - root
+cd / - home
+./ - current directory
+su - superuser
+sudo - SUperuser DO 
+
+--------------------------------------------------------
+GIT AUTH COMMANDS
+
+// displays logged in accounts
+gh auth status
+
+// logs out the selected user
+gh auth logout -h github.com -u OLD-USERNAME
+
+-------------------------------------------------------
+git clone <repo link>
+git clone -b main https://<username>:<PAT>@github.com/<org>/<repo>.git
+git add <filename>
+git status
+git commit -m "insert message"
+git commit --amend -m "insert edit message"
+git restore . // reverts all unstaged changes
+git restore -p --staged <file> // an interactive editor letting you view each line changed
+
+// deletes all untracked files
+git clean 
+git clean -n --dry-run | shows the files up for deletion
+git clean -i --interactive | asks what to do with the untrack ed files
+git clean -f | forces the operation
+
+// check current branch
+git branch
+
+// rename current branch
+git branch -m <branch-name>
+
+// retrieves changes from origin to local
+git fetch
+
+git log --no-pager log -n 10
+OR git log --no-pager log -10
+
+git log --oneline --parent --graph
+
+// display all git objects
+ls -al .git/objects
+
+// directory of branch pointer history (each file lists commits the branch has ever pointed to)
+cd .git/logs/refs/heads
+
+// convert commited git file to hex
+xxd .git/objects/6f/db27b844a4a556fe87e485bfef0b7f7dffd876 > /tmp/commit_object_hex.txt
+
+cat (short for concatenate, displays contents of a file/ prints the hash of a tree/blob)\
+
+// to properly read git objects
+git cat-file -p <object-hash>
+
+// to display commit hash on the branch/HEAD
+git rev-parse HEAD
+git rev-parse <branch name>
+
+//view git config
+git config --list
+
+git config --add <section>.<property> <value>
+
+// to remove all instances of a property
+git config --unset-all <section>.<property>
+
+// to remove a specific section
+git config --remove-section
+
+// set default branch to main
+git config --add init.defaultBranch main
+
+// ONLY creates new branch
+git branch new_branch
+
+// (preferred) creates new branch AND switches to it
+git switch -c new_branch
+
+// creates a new local branch and tracks the origin branch
+git switch -c branch_name --track origin/branch_name
+
+// creates a duplicate of the current branch
+git checkout -b duplicate_branch
+
+// deletes the branch (safe delete)
+git branch -d branch_name
+
+// deletes the branch (hard delete)
+git branch -D branch_name
+
+--------------------------------------------------------
+LOG FLAGS
+
+short (default)
+full (shows full ref name)
+no (no decoration)
+
+// h - short hash
+// an - author name
+// s - subject
+
+git log --pretty=format:"%h %an %s"
+
+// includes refname
+git log --decorate=full
+
+git log --no-pager log -n 10
+OR git log --no-pager log -10
+
+git log --oneline --parent --graph
+
+// prints commit history with no decoration
+git log --oneline | tee out
+
+--------------------------------------------------------
+
+Git Push
+
+git push origin main
+
+git push origin <localBranch>:<remoteBranch>
+
+// deletes a remote branch by pushing an empty branch
+git push origin :<remoteBranch>
+
+// pushes the local branch to the new remote branch for the first time, and sets it as upstream
+git push -u origin <branchName>
+
+Git Pull
+
+git pull [<remote>/<branch>]
+
+
+Prune
+
+// removes remote tracking branches that no longer exists
+git fetch --prune
+git fetch -p
+
+// enables auto prune
+git config --global fetch.prune true
+
+--------------------------------------------------------
+
+// find all files matching with .csv in the repo
+// . -start finding in the current directory
+find . -name "*.csv"
+
+// re-applies the commits of main before adding the new commits on top of it, on a separate branch
+
+git switch <feature branch> <commit hash(location of new base)>
+git rebase main
+
+// moves the branch pointer forward or backward to the given commit
+git reset <commit hash>
+
+// resets but keeps the uncommitted changes
+git reset --soft <commit hash>
+
+// resets but deletes all uncommitted changes
+git reset --hard <commit hash>
+
+// reset and undo last commit to origin (RISKY)
+git reset --hard HEAD~1
+git push origin <branch>
+//better
+git revert <hash of commit to be undone>
+
+// adds a remote repo (true source)
+git remote add <name> <uri>
+
+// checks the remote repo
+git ls-remote
+
+// used to create a new local branch that tracks a remote branch
+git checkout -b local-branch origin/remote-branch
+
+// used to check which remote branches are being tracked by each local branch
+git branch -vv
+
+// renames the remote repo
+git remote rename <old name> <new name>
+
+// used to print the commit log of a remote repo
+git log <remote name>/<branch name>
+
+ex. git log origin/main
+
+// set to rebase by default on pull
+git config --global pull.rebase true
+
+--------------------------------------------------------
+Workflow
+
+Solo
+
+1. Make changes to files
+2. git add . (or git add <files>)
+3. git commit -m "message describing the changes"
+4. git push origin main
+
+Team
+1. Update my local main branch with git pull origin main
+2. Checkout a new branch for the changes I want to make with git switch -c <branchname>
+3. Make changes to files
+4. git add .
+5. git commit -m "a message describing the changes"
+6. git push origin <branchname> (I push to the new branch name, not main)
+7. Open a pull request on GitHub to merge my changes into main
+8. Ask a team member to review my pull request
+9. Once approved, click the "Merge" button on GitHub to merge my changes into main
+10. Delete my feature branch, and repeat with a new branch for the next set of changes
+
+
+--------------------------------------------------------
+Gitignore patterns
+
+* - Matches any number of characters except a slash. Used to ignore all .txt files
+
+	*.txt
+/ - anchored to the directory containing the .gitignore file. This would ignore a main.py in the root directory, but not in any subdirectories.
+
+	/main.py
+
+Negation
+You can negate a pattern by prefixing it with an exclamation mark (!). For example, to ignore all .txt files except for important.txt, you could use the following pattern:
+
+*.txt
+!important.txt
+
+--------------------------------------------------------
+
+// audit log/shows a history of where the head has pointed
+git reflog
+
+git cat-file -p <hash>
+
+>tree e61f86bc41817b68b378a55cb6f62c8357e6d082
+
+// tree
+git cat-file -p e61f86bc41817b68b378a55cb6f62c8357e6d082
+
+//blob of deleted file
+git cat-file -p 30fbe30f2546d07d072707dc4fc46079ee26ff09
+
+
+--------------------------------------------------------
+
+git merge <commitish>
+
+git reflog (find the commit sha at HEAD@{1})
+git cat-file -p <commit sha>
+git cat-file -p <tree sha>
+git cat-file -p <blob sha> > slander.md
+git add .
+git commit -m "B: recovery"
+
+vs
+
+git merge HEAD@{1}
+
+--------------------------------------------------------
+
+In a merge conflict:
+
+"Ours" refers to the branch you are on (merging into)
+"Theirs" refers to the branch being merged
+
+<<<<<<<<<< HEAD (ours)
+Ballan, Agrandian, Boots, lor, Protagonist
+
+===============
+
+flip,media,FLIP,CEO
+>>>>>>>>>> main (theirs)
+
+//use:
+git checkout --ours <path to file>
+
+--------------------------------------------------------
+
+Git Squash
+
+-combines multiple commits into 1
+
+git rebase -i HEAD~N(number of previous commits)
+
+--------------------------------------------------------
+Git Stash
+
+-saves staged, or unstaged, but NOT COMMITTED changes to a separate storage
+
+git stash
+
+// stash with a message
+git stash -m "jdsl v0 almost working"
+
+// outputs contents of stash
+git stash list
+
+// takes out and re-applies the last added change in the stack
+git stash pop
+
+// applies the most recent stash changes without removing the stash from the list
+git stash apply
+
+// removes the most recent stash without applying the changes to the directory
+git stash drop
+
+//allows referencing of the stashes' index
+# Apply the third (0, 1, 2) most recent stash
+git stash apply stash@{2}
+
+# Remove the third most recent stash
+git stash drop stash@{2}
+
+--------------------------------------------------------
+Git Revert
+
+// creates a new commit that undo-es the changes in the given commit,
+// without erasing that commit from the history
+git revert <hash>
+
+--------------------------------------------------------
+Git Diff
+-used to show the changes between the working tree and the last commit
+
+git diff HEAD~N
+git diff <commit hash 1> <commit hash 2>
+
+--------------------------------------------------------
+Git Cherry Pick
+allows selecting a specific commit from a branch
+
+*switch to main
+
+// for adding changes from a specific commit and branch to the current one
+git cherry-pick <hash>
+
+--------------------------------------------------------
+Git Bisect
+
+uses binary search to narrow down the commit that introduced a certain change
+
+git bisect start
+
+git bisect good <hash> // marks a commit as good
+
+git bisect bad <hash> // marks a commit as bad
+
+git bisect <good/bad> HEAD // marks current commit
+
+git bisect run ./scripts/bisect.sh
+
+git bisect reset // exits bisect mode
+
+/**bisect.sh - used to automate marking good and bad commits
+
+if grep -q "<search term>" "path/to/file"; then
+    exit 1
+else
+    exit 0
+fi
+
+EXAMPLE:
+if grep -q "SCANNING" "scripts/scan.sh"; then
+    exit 1
+else
+    exit 0
+fi
+
+*/
+
+--------------------------------------------------------
+Git Worktree
+- a worktree is a directory on the filesystem where code that Git is tracking lives (contains project files in the state of the checked out commit; .git file only points to the main file, and does not contain the entire history)
+
+git worktree list
+
+git worktree add <path> [branch]
+
+--------------------------------------------------------
+Git Tags
+
+git tag // displays a list
+
+git tag -a "tag name" -m "tag message" // assigns a tag to the current commit

@@ -1,0 +1,93 @@
+Linux commands
+
+<tab> | autocomplete/type suggestions
+cd | change directory
+mkdir | create directory
+mv | move; used to move files or rename
+rm | remove (add -r for recursive, f for force)
+less -N | view file contents with lines
+ls -l | lists files in the current directory
+find /path/to/search -name "name" | searches for a file in the directory
+grep | searches for matching text in the file (add -r for recursive)
+du -sh | disk usage - displays file sizes (add -s to summarize/don't list every file, -h for human readable)
+  --max-depth=1 - displays sizes per folder
+
+chmod | (change mode) - re-assigns permissions for files or directories
+chmod -R u=rwx,g=,o= <directory> | u = user(owner), g = group, o = others
+chmod -x | removes all execute permissions
+chmod +x | adds all execute permissions
+chmod u+x | adds execute permission for user
+
+sudo | superuser do; gives elevated permissions to run a single command
+
+chown | changes the owner of the file or directory
+
+which sh | outputs the location of an installed command line program
+
+export NAME="<name>" | assigns variables
+
+PATH | environment variables built-in to the shell
+
+echo $PATH | outputs the PATH environment variable
+
+echo $? | outputs the exit code of the last command
+
+man | short for manual
+
+--------------------------------------------------------
+Running a script
+> - output to file
+2> - output error to file
+
+./directory/to/script.sh directory/to/file.txt 2> tmp/logfile.log
+
+--------------------------------------------------------
+Piping - |
+
+(word count -words)
+echo "Have you heard the tragedy of Darth Plagueis the Wise?" | wc -w
+
+// count the number of lines (wc -l) where "Bob" appears in transactions, excluding the backup directory
+grep -R "Bob" private/transactions --exclude-dir="backups" | wc -l
+
+--------------------------------------------------------
+Signal Interrupt (SIGINT)
+-used to stop any running command
+
+Ctrl + C
+
+--------------------------------------------------------
+Kill
+
+kill PID (process id)
+
+ps aux | grep malicious.sh (grep the output of ps aux to find the row of malicious.sh)
+
+--------------------------------------------------------
+Top
+-used to display the list programs using the most resources
+
+M (filter by memory usage)
+
+--------------------------------------------------------
+APT
+-advanced package tool
+-used to install, update, remove software, and manage dependencies
+
+apt --version
+
+--------------------------------------------------------
+Webi (https://webinstall.dev/)
+-package installer for commands, directly from the web
+
+// Linux/WSL installer for lsd
+curl -sS https://webi.sh/lsd | sh; \
+source ~/.config/envman/PATH.env
+
+--------------------------------------------------------
+WSL in VSCode
+
+In VSCode
+1. Click bottomleft corner button
+2. Connect to WSL using Distro > Ubuntu
+
